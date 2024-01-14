@@ -1,4 +1,4 @@
-package voidterm
+package termutil
 
 type MeasuredRune struct {
 	Rune  rune

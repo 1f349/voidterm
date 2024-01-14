@@ -1,12 +1,12 @@
-package voidterm
+package termutil
 
 import (
 	"image/color"
 )
 
 type CellAttributes struct {
-	fg            color.Color
-	bg            color.Color
+	fgColour      color.Color
+	bgColour      color.Color
 	bold          bool
 	italic        bool
 	dim           bool

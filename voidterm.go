@@ -1,27 +1,18 @@
 package voidterm
 
 import (
-	"os"
-	"sync"
-)
-
-const (
-	MainBuffer     uint8 = 0
-	AltBuffer      uint8 = 1
-	InternalBuffer uint8 = 2
+	"github.com/1f349/voidterm/termutil"
 )
 
 type VoidTerm struct {
-	mu             sync.Mutex
-	pty            *os.File
-	updateChan     chan struct{}
-	processChan    chan MeasuredRune
-	closeChan      chan struct{}
-	buffers        []*Buffer
-	activeBuffer   *Buffer
-	mouseMode      MouseMode
-	mouseExtMode   MouseExtMode
-	running        bool
-	shell          string
-	initialCommand string
+	term *termutil.Terminal
+}
+
+func New(dockerContainer, shell string) *VoidTerm {
+	term := termutil.New(termutil.WithShell(shell))
+	return &VoidTerm{term: term}
+}
+
+func (v *VoidTerm) Run() {
+	v.term.Run()
 }
