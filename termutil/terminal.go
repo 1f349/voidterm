@@ -6,11 +6,9 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"os/exec"
 	"sync"
 
 	"github.com/creack/pty"
-	"golang.org/x/term"
 )
 
 const (
@@ -131,11 +129,12 @@ func (t *Terminal) SetSize(rows, cols uint16) error {
 }
 
 // Run starts the terminal/shell proxying process
-func (t *Terminal) Run(updateChan chan struct{}, rows uint16, cols uint16) error {
+func (t *Terminal) Run(updateChan chan struct{}, rows, cols uint16, pty *os.File) error {
 
 	os.Setenv("TERM", "xterm-256color")
 
 	t.updateChan = updateChan
+	t.pty = pty
 
 	if t.shell == "" {
 		t.shell = os.Getenv("SHELL")
@@ -144,30 +143,8 @@ func (t *Terminal) Run(updateChan chan struct{}, rows uint16, cols uint16) error
 		}
 	}
 
-	// Create arbitrary command.
-	c := exec.Command(t.shell)
-
-	// Start the command with a pty.
-	var err error
-	t.pty, err = pty.Start(c)
-	if err != nil {
-		return err
-	}
-	// Make sure to close the pty at the end.
-	defer func() { _ = t.pty.Close() }() // Best effort.
-
 	if err := t.SetSize(rows, cols); err != nil {
 		return err
-	}
-
-	// Set stdin in raw mode.
-
-	if fd := int(os.Stdin.Fd()); term.IsTerminal(fd) {
-		oldState, err := term.MakeRaw(fd)
-		if err != nil {
-			t.windowManipulator.ReportError(err)
-		}
-		defer func() { _ = term.Restore(fd, oldState) }() // Best effort.
 	}
 
 	go t.process()

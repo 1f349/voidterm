@@ -2,10 +2,7 @@ package termutil
 
 import (
 	"image"
-	"math"
-	"strings"
-
-	"github.com/liamg/darktile/internal/app/darktile/sixel"
+	"log"
 )
 
 type Sixel struct {
@@ -87,15 +84,7 @@ func (t *Terminal) handleSixel(readChan chan MeasuredRune) (renderRequired bool)
 			continue
 		case 0x5c:
 			if inEscape {
-				img, err := sixel.Decode(strings.NewReader(string(data)), t.theme.DefaultBackground())
-				if err != nil {
-					return false
-				}
-				w, h := t.windowManipulator.CellSizeInPixels()
-				cw := int(math.Ceil(float64(img.Bounds().Dx()) / float64(w)))
-				ch := int(math.Ceil(float64(img.Bounds().Dy()) / float64(h)))
-				t.activeBuffer.addSixel(img, cw, ch)
-				return true
+				log.Fatal("Cannot load sixel")
 			}
 		}
 
