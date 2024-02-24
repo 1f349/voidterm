@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>VoidTerm Debug</title>
+    <script>{{.Keysight}}</script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const textbox = document.getElementById("textbox");
+            const ws = new WebSocket("ws://localhost:8080");
+            ws.addEventListener("message", function (event) {
+                textbox.value = JSON.parse(event.data).Text;
+            });
+
+            window.addEventListener("keydown", function (event) {
+                if (["Control", "Alt", "Shift"].indexOf(event.key) !== -1) return;
+                let char = window.keysight(event).char;
+                let code = char.charCodeAt(0);
+                if (event.ctrlKey) {
+                    code = char.toUpperCase().charCodeAt(0) - 64;
+                }
+                ws.send(JSON.stringify({Code: code}));
+            })
+        });
+    </script>
+</head>
+<body>
+<label><textarea id="textbox" style="width:100%;height:750px;"></textarea></label>
+<form method="POST">
+    <input type="hidden" name="format" value="hex">
+    {{range .Buttons}}
+        <button type="submit" name="value" value="{{.Hex}}">{{.Text}}</button>
+    {{end}}
+</form>
+</body>
+</html>

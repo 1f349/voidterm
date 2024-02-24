@@ -3,11 +3,10 @@ module github.com/1f349/voidterm
 go 1.21.6
 
 require (
-	github.com/1f349/qpty v0.0.3
 	github.com/creack/pty v1.1.21
 	github.com/fsouza/go-dockerclient v1.10.1
+	github.com/gorilla/websocket v1.5.1
 	github.com/stretchr/testify v1.8.4
-	golang.org/x/term v0.16.0
 )
 
 require (
@@ -31,8 +30,10 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	golang.org/x/mod v0.14.0 // indirect
+	golang.org/x/net v0.20.0 // indirect
 	golang.org/x/sys v0.16.0 // indirect
 	golang.org/x/tools v0.17.0 // indirect
 	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	gotest.tools/v3 v3.5.1 // indirect
 )

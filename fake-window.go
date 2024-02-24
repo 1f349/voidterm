@@ -5,7 +5,10 @@ import (
 	"log"
 )
 
-type FakeWindow struct{}
+type FakeWindow struct {
+	Rows uint16
+	Cols uint16
+}
 
 var _ termutil.WindowManipulator = &FakeWindow{}
 
@@ -46,7 +49,7 @@ func (f *FakeWindow) CellSizeInPixels() (int, int) {
 
 func (f *FakeWindow) SizeInChars() (int, int) {
 	log.Println("SizeInChars")
-	return 14, 11
+	return int(f.Cols), int(f.Rows)
 }
 
 func (f *FakeWindow) ResizeInPixels(x int, y int) {
@@ -64,7 +67,7 @@ func (f *FakeWindow) ScreenSizeInPixels() (int, int) {
 
 func (f *FakeWindow) ScreenSizeInChars() (int, int) {
 	log.Println("ScreenSizeInChars")
-	return 96, 108
+	return int(f.Cols), int(f.Rows)
 }
 
 func (f *FakeWindow) Move(x, y int) {
