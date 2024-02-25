@@ -57,3 +57,7 @@ func (cell *Cell) erase(bgColour color.Color) {
 func (cell *Cell) setRune(r MeasuredRune) {
 	cell.r = r
 }
+
+func EmptyCell() Cell {
+	return Cell{MeasuredRune{Rune: ' '}, CellAttributes{}}
+}
